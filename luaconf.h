@@ -211,8 +211,17 @@
 */
 #if defined(LUA_LIB) || defined(lua_c)
 #include <stdio.h>
+
+#ifdef GBA
+extern void con_write_string(const char *s);
+#define luai_writestring(s,l)	con_write_string(s)
+#define luai_writeline()	luai_writestring("\n", 1)
+
+#else
 #define luai_writestring(s,l)	fwrite((s), sizeof(char), (l), stdout)
 #define luai_writeline()	(luai_writestring("\n", 1), fflush(stdout))
+#endif
+
 #endif
 
 /*
